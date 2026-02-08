@@ -1,0 +1,31 @@
+---
+layout: post
+title: Mutations Lactf
+comments: true
+categories: [Web, Writeups]
+---
+
+En este caso traigo un reto que me pareció divertido de la última [Lactf](https://ctftime.org/event/3015).
+
+# Overview
+
+Es un reto facilón de web en el que tenemos una página aparentemente sin contenido, pero que está cargando en el código de la página diferentes flags continuamente. El problema comienza al tratar de abrir las dev-tools, ya que la página bloquea la tecla f12 y el Ctl+Shift+C.
+
+# Explotación
+
+Para poder comenzar la explotación debemos abrir las dev-tools en otra pestaña y una vez abiertas acceder a la página. Una vez dentro, podemos pausar la ejecución de código JS y con un script como el siguiente podemos extraer las flags que se están imprimiendo:
+
+```js
+const walker = document.createTreeWalker(document.documentElement.parentNode, NodeFilter.SHOW_COMMENT);
+let node;
+while(node = walker.nextNode()) {
+    if (node.nodeValue.includes('lactf{') && !/fake|wrong|nope|try|close|bait|trick/.test(node.nodeValue)) {
+        console.log("¡ENCONTRADA!", node.nodeValue.trim());
+    }
+}
+```
+
+Y así obtendremos la flag:
+
+<br>
+![Image]({{ site.baseurl }}/images/posts/2026-02-08-mutation_flag.png){:width="150px"}
