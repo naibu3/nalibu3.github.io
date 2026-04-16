@@ -10,32 +10,31 @@
     <link rel="canonical" href="{{ site.url }}{{ page.url }}" />
 
     <meta name="theme-color" content="#000000">
-    <link rel="icon" type="image/png" sizes="32x32" href="{{ site.baseurl }}/images/favicon-32x32.png">
+    <link rel="icon" type="image/svg+xml" href="{{ site.baseurl }}/favicon.svg">
     {% include analytics_head.html %}
   </head>
 
-  <body>
+  <body class="layout-{{ page.layout | default: 'default' }}">
     <div id="bar"></div>
     <div class="wrapper-container">
       <div class="wrapper-masthead">
         <div class="container">
           <header class="masthead clearfix">
-            <span style="display: flex;">
-              <a href="{{ site.baseurl }}/" class="site-avatar"><img src="{{ site.baseurl }}{{ site.avatar }}" alt="{{ site.title }}" /></a>
+            <div class="site-brand">
+              <a href="{{ site.baseurl }}/" class="site-avatar"><img src="{{ site.baseurl }}/favicon.svg" alt="{{ site.title }}" /></a>
 
               <div class="site-info">
-                <h1 class="site-name"><a href="{{ site.baseurl }}/">{{ site.name }}</a></h1>
-                <p class="site-description">{{ site.description }}</p> 
+                <h1 class="site-name"><a href="{{ site.baseurl }}/">[naibu3@ctf]$</a></h1>
               </div>
-            </span>
+            </div>
 
             <nav class="top-bar">
-              <a href="{{ site.baseurl }}/">Inicio</a>
-              <a href="{{ site.baseurl }}/about">About</a>
-              <a href="{{ site.baseurl }}/getting-started">Getting Started</a>
-              <a href="{{ site.baseurl }}/search">Buscar</a>
-              <a href="{{ site.baseurl }}/archive">Archivo</a>
-              <a href="{{ site.baseurl }}/categories">Categorias</a>
+              <a href="{{ site.baseurl }}/" class="{% if page.url == '/' %}is-current{% endif %}">Inicio</a>
+              <a href="{{ site.baseurl }}/about" class="{% if page.url == '/about/' %}is-current{% endif %}">About</a>
+              <a href="{{ site.baseurl }}/getting-started" class="{% if page.url == '/getting-started/' %}is-current{% endif %}">Getting Started</a>
+              <a href="{{ site.baseurl }}/search" class="{% if page.url == '/search/' %}is-current{% endif %}">Buscar</a>
+              <a href="{{ site.baseurl }}/archive" class="{% if page.url == '/archive/' %}is-current{% endif %}">Archivo</a>
+              <a href="{{ site.baseurl }}/categories" class="{% if page.url == '/categories/' %}is-current{% endif %}">Categorias</a>
             </nav>
           </header>
         </div>

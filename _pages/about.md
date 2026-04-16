@@ -5,11 +5,11 @@ permalink: /about/
 ---
 
 <div class="container mt-4">
-  <div class="row align-items-center">
-    <div class="col-md-3 text-center d-flex justify-content-center">
-      <img src="/images/pages/about/pablo.jpg" alt="Foto de Pablo" class="img-fluid rounded-3" style="max-width: 200px;" id="profileImage">
+  <div class="about-layout">
+    <div class="about-profile">
+      <img src="/images/pages/about/pablo.jpg" alt="Foto de Pablo" class="about-profile-image" id="profileImage">
     </div>
-    <div class="col-md-8">
+    <div class="about-copy">
       <p>
         ¡Hola! Soy Pablo (aunque en ctfs me encontraréis como <strong>naibu3</strong> o <strong>pablipoyo</strong>), soy graduado en Ingeniería Informática por la 
         <a href="http://www.uco.es/">Universidad de Córdoba</a> y actualmente trabajo como Pentester en DEKRA Málaga. Como podéis ver, una de mis grandes pasiones es la ciberseguridad, regularmente participo en 
@@ -24,60 +24,48 @@ permalink: /about/
     </div>
   </div>
 
-    <br>
+  <hr>
 
-  <hr class="my-4">
-
-    <br>
-
-  <div id="certCarousel" class="carousel slide" data-bs-ride="carousel">
-    <div class="carousel-inner">
-      <div class="carousel-item active">
-        <img src="/images/posts/eJPT_cert.png" class="d-block w-75 mx-auto" alt="eJPT">
-      </div>
-      <div class="carousel-item active">
-        <img src="/images/pages/about/CRTP.png" class="d-block w-75 mx-auto" alt="CRTP">
-      </div>
-      <div class="carousel-item">
-        <img src="/images/pages/about/NCL_cert.png" class="d-block w-75 mx-auto" alt="NCL">
-      </div>
-      <div class="carousel-item">
-        <img src="/images/pages/about/hack4u_cert.png" class="d-block w-75 mx-auto" alt="Hack4U Introducción al Hacking">
-      </div>
-      <div class="carousel-item">
-        <img src="/images/pages/about/hackademics.jpg" class="d-block w-75 mx-auto" alt="Hackademics">
-      </div>
-      <div class="carousel-item">
-        <img src="/images/pages/about/HF3.png" class="d-block w-75 mx-auto" alt="Hackademics 3">
-      </div>
-      <div class="carousel-item">
-        <img src="/images/pages/about/NHNCTF.png" class="d-block w-75 mx-auto" alt="NHNCTF">
-      </div>
-      <div class="carousel-item">
-        <img src="/images/pages/about/UGR.png" class="d-block w-75 mx-auto" alt="UGR">
-      </div>
-      <!-- Añade más items según necesites -->
+  <div class="about-carousel" aria-label="Certificaciones">
+    <button class="about-carousel-control" type="button" aria-label="Anterior" data-carousel-prev>&lt;</button>
+    <div class="about-carousel-track" data-carousel-track>
+      <img src="/images/posts/eJPT_cert.png" alt="eJPT" class="about-carousel-slide is-active">
+      <img src="/images/pages/about/CRTP.png" alt="CRTP" class="about-carousel-slide">
+      <img src="/images/pages/about/NCL_cert.png" alt="NCL" class="about-carousel-slide">
+      <img src="/images/pages/about/hack4u_cert.png" alt="Hack4U Introducción al Hacking" class="about-carousel-slide">
+      <img src="/images/pages/about/hackademics.jpg" alt="Hackademics" class="about-carousel-slide">
+      <img src="/images/pages/about/HF3.png" alt="Hackademics 3" class="about-carousel-slide">
+      <img src="/images/pages/about/NHNCTF.png" alt="NHNCTF" class="about-carousel-slide">
+      <img src="/images/pages/about/UGR.png" alt="UGR" class="about-carousel-slide">
     </div>
-    <button class="carousel-control-prev" type="button" data-bs-target="#certCarousel" data-bs-slide="prev" style="background-color: transparent; border: none;">
-      <span class="carousel-control-prev-icon" aria-hidden="true" style="background-color: black;"></span>
-      <span class="visually-hidden">Anterior</span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#certCarousel" data-bs-slide="next" style="background-color: transparent; border: none;">
-      <span class="carousel-control-next-icon" aria-hidden="true" style="background-color: black;"></span>
-      <span class="visually-hidden">Siguiente</span>
-    </button>
+    <button class="about-carousel-control" type="button" aria-label="Siguiente" data-carousel-next>&gt;</button>
   </div>
 </div>
 
-<!-- Asegúrate de tener Bootstrap cargado -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const track = document.querySelector("[data-carousel-track]");
+  if (!track) return;
 
-<style>
-  /* Media query para dispositivos móviles: */
-  @media (max-width: 767px) {
-    #profileImage {
-      display: none; /* Oculta la imagen en pantallas pequeñas */
-    }
+  const slides = Array.from(track.querySelectorAll(".about-carousel-slide"));
+  const prev = document.querySelector("[data-carousel-prev]");
+  const next = document.querySelector("[data-carousel-next]");
+  let currentIndex = 0;
+
+  function renderSlide(index) {
+    slides.forEach((slide, slideIndex) => {
+      slide.classList.toggle("is-active", slideIndex === index);
+    });
   }
-</style>
+
+  prev.addEventListener("click", function () {
+    currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+    renderSlide(currentIndex);
+  });
+
+  next.addEventListener("click", function () {
+    currentIndex = (currentIndex + 1) % slides.length;
+    renderSlide(currentIndex);
+  });
+});
+</script>

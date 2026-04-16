@@ -2,41 +2,96 @@
 layout: default
 ---
 
-<article class="post detailed">
-  <h1>{{ page.title }}</h1>
+<div class="post-shell">
+  <article class="post detailed">
+    <h1>{{ page.title }}</h1>
 
-  <div>
-    <p class="author_title">{{site.author}}  ·  {{ page.date | date: "%B %e, %Y" }}</p>
-    {% if page.last_modified_at %}
-    <p class="author_title" datetime="{{ page.last_modified_at | date_to_xmlschema }}">(Updated: {{ page.last_modified_at | date: "%b %-d, %Y" }})</p>
-    {% endif %}
-    <div class="post-tags">
-      {% if post %}
-        {% assign categories = post.categories %}
-      {% else %}
-        {% assign categories = page.categories %}
+    <div>
+      <p class="author_title">{{site.author}}  ·  {{ page.date | date: "%B %e, %Y" }}</p>
+      {% if page.last_modified_at %}
+      <p class="author_title" datetime="{{ page.last_modified_at | date_to_xmlschema }}">(Updated: {{ page.last_modified_at | date: "%b %-d, %Y" }})</p>
       {% endif %}
-      {% for category in categories %}
-        <a href="{{site.baseurl}}/categories/#{{category | slugify}}" class="category-tag category-{{ category | slugify }}">
-          {{ category }}
-        </a>
+      <div class="post-tags">
+        {% if post %}
+          {% assign categories = post.categories %}
+        {% else %}
+          {% assign categories = page.categories %}
+        {% endif %}
+        {% for category in categories %}
+          <a href="{{site.baseurl}}/categories/#{{category | slugify}}" class="category-tag category-{{ category | slugify }}">
+            {{ category }}
+          </a>
 
-        {% unless forloop.last %}&nbsp;{% endunless %}
-      {% endfor %}
+          {% unless forloop.last %}&nbsp;{% endunless %}
+        {% endfor %}
+      </div>
     </div>
-  </div>
-    
-  <div class="entry">
-    {{ content }}
-  </div>
+      
+    <div class="entry" data-post-entry>
+      {{ content }}
+    </div>
 
-  <div>
-    <p><span class="share-box">Share:</span> <a href="http://twitter.com/share?text={{ page.title }}&url={{site.url}}{{page.url}}" target="_blank">Twitter</a>, <a href="https://www.facebook.com/sharer.php?u={{site.url}}{{page.url}}" target="_blank">Facebook</a></p>
-  </div>
+    <div>
+      <p><span class="share-box">Share:</span> <a href="http://twitter.com/share?text={{ page.title }}&url={{site.url}}{{page.url}}" target="_blank">Twitter</a>, <a href="https://www.facebook.com/sharer.php?u={{site.url}}{{page.url}}" target="_blank">Facebook</a></p>
+    </div>
 
-  <!--<div class="date">
-    Written on {{ page.date | date: "%B %e, %Y" }}
-  </div>-->
+    {% include disqus.html %}
+  </article>
 
-  {% include disqus.html %}
-</article>
+  <aside class="post-toc" data-post-toc>
+    <p class="post-toc-title">{{ page.title }}</p>
+    <nav class="post-toc-nav" aria-label="Secciones del post">
+      <ul class="post-toc-list" data-post-toc-list></ul>
+    </nav>
+  </aside>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const entry = document.querySelector("[data-post-entry]");
+  const toc = document.querySelector("[data-post-toc]");
+  const tocList = document.querySelector("[data-post-toc-list]");
+  if (!entry || !toc || !tocList) return;
+
+  const headings = Array.from(entry.querySelectorAll("h1, h2, h3"));
+  if (!headings.length) return;
+
+  function slugify(text) {
+    return text
+      .toLowerCase()
+      .trim()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-z0-9\s-]/g, "")
+      .replace(/\s+/g, "-")
+      .replace(/-+/g, "-");
+  }
+
+  const usedIds = new Set();
+
+  headings.forEach((heading, index) => {
+    let id = heading.id || slugify(heading.textContent) || "section-" + index;
+    let suffix = index + 1;
+
+    while (usedIds.has(id)) {
+      id = (heading.id || slugify(heading.textContent) || "section-" + index) + "-" + suffix;
+      suffix += 1;
+    }
+
+    usedIds.add(id);
+    heading.id = id;
+
+    const item = document.createElement("li");
+    item.className = "post-toc-item post-toc-item-" + heading.tagName.toLowerCase();
+
+    const link = document.createElement("a");
+    link.href = "#" + id;
+    link.textContent = heading.textContent.trim();
+
+    item.appendChild(link);
+    tocList.appendChild(item);
+  });
+
+  toc.classList.add("is-visible");
+});
+</script>
